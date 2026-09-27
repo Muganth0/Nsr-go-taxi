@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nsr-go-taxi.vercel.app/sitemap.xml
