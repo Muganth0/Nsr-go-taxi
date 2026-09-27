@@ -23,14 +23,6 @@ function setLiveBadge(state){
   else { b.classList.add('is-estimate'); b.innerHTML='<i></i>Estimate'; }
 }
 
-// Last-resort fallback only used when geocoding itself fails (no internet / place not found)
-function knownPairFallback(a,b){
-  const key=(a+' '+b).toLowerCase();
-  const known=[['chennai','tirupati',150],['chennai','pondicherry',160],['chennai','bangalore',345],['chennai','madurai',460],['chennai','coimbatore',500],['chennai','ooty',555],['chennai','kodaikanal',520],['chennai','munnar',585],['chennai','rameswaram',565],['chennai','athirappilly',650],['chennai','coorg',580]];
-  for(const [x,y,d] of known) if(key.includes(x) && key.includes(y)) return d;
-  return 80; // generic placeholder distance when nothing else can be determined
-}
-
 function haversineKm(lat1,lon1,lat2,lon2){
   const R=6371, toRad=d=>d*Math.PI/180;
   const dLat=toRad(lat2-lat1), dLon=toRad(lon2-lon1);
@@ -93,7 +85,10 @@ async function computeRoute(pickup, destination){
     return lastRoute;
   }catch(err){
     // A straight-line fallback is explicitly labelled approximate.
+    // Never invent a fixed distance: the estimate must come from the
+    // geocoded pickup/destination coordinates.
     const straight = haversineKm(from.lat,from.lon,to.lat,to.lon);
+    if(!Number.isFinite(straight) || straight <= 0) throw new Error('Unable to determine a safe fallback distance.');
     const km = Math.max(1, Math.round(straight * 1.25));
     lastRoute = {key, km, minutes:null, live:false, from:from.label, to:to.label};
     setLiveBadge('estimate');
