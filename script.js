@@ -1,4 +1,4 @@
-const PHONE = '917092709200';
+const PHONE = '917010123465';
 const rates = {
   sedan:{oneway:15,roundtrip:14,bata:400},
   suv:{oneway:20,roundtrip:19,bata:400},
