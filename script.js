@@ -269,6 +269,7 @@ if(menuButton && header){
   menuButton.addEventListener('click', ()=>{
     const open = header.classList.toggle('nav-open');
     menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     menuButton.textContent = open ? '✕' : '☰';
   });
 
@@ -276,6 +277,7 @@ if(menuButton && header){
     link.addEventListener('click', ()=>{
       header.classList.remove('nav-open');
       menuButton.setAttribute('aria-expanded','false');
+      menuButton.setAttribute('aria-label','Open menu');
       menuButton.textContent = '☰';
     });
   });
