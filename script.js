@@ -258,3 +258,25 @@ $('enquiryForm').addEventListener('submit', e=>{
 const today = new Date();
 $('date').min = today.toISOString().slice(0,10);
 $('date').value = today.toISOString().slice(0,10);
+
+
+/* Mobile navigation */
+const menuButton = document.querySelector('.menu');
+const header = document.querySelector('.header');
+const mobileNavLinks = document.querySelectorAll('.header nav a');
+
+if(menuButton && header){
+  menuButton.addEventListener('click', ()=>{
+    const open = header.classList.toggle('nav-open');
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.textContent = open ? '✕' : '☰';
+  });
+
+  mobileNavLinks.forEach(link=>{
+    link.addEventListener('click', ()=>{
+      header.classList.remove('nav-open');
+      menuButton.setAttribute('aria-expanded','false');
+      menuButton.textContent = '☰';
+    });
+  });
+}

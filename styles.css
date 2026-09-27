@@ -867,3 +867,93 @@
 .fare-notice:has(input:not(:checked)){
   box-shadow:0 0 0 1px rgba(239,215,124,.15);
 }
+
+/* V11 — mobile UI stability */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+@media(max-width:760px){
+.header{position:sticky;top:0;z-index:100}
+.header-inner{width:100%;min-height:72px!important;padding:6px 12px!important;gap:8px}
+.header .logo{width:156px!important;height:56px!important;flex:0 0 156px!important}
+.header .logo img{width:100%!important;max-height:52px!important}
+.menu{display:grid!important;place-items:center;width:44px;height:44px;margin-left:auto;border-radius:10px;font-size:25px;line-height:1;padding:0;flex:0 0 44px}
+.header.nav-open nav{display:flex!important;position:absolute;top:100%;left:10px;right:10px;margin:0!important;padding:10px;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:2px;background:rgba(8,8,8,.98);border:1px solid rgba(255,196,0,.2);border-radius:0 0 14px 14px;box-shadow:0 18px 35px rgba(0,0,0,.35);z-index:120}
+.header.nav-open nav a{display:block;width:100%;padding:13px 14px!important;border-radius:8px;font-size:13px!important}
+.header.nav-open nav a.active:after{display:none}
+.header.nav-open nav a.active{background:rgba(255,196,0,.12)}
+.hero-reference{height:auto!important;min-height:0!important;overflow:hidden!important}
+.hero-reference .hero-image{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,5,.96) 0%,rgba(5,5,5,.86) 38%,rgba(5,5,5,.50) 61%,rgba(5,5,5,.94) 100%),url('assets/nsr-heritage-cab-hero.webp') center bottom/auto 58% no-repeat,#050505!important}
+.hero-reference .hero-content{min-height:0!important;height:auto!important;padding:38px 18px 48px!important;display:block!important}
+.hero-reference .hero-copy{width:100%!important;max-width:none!important}
+.hero-reference .eyebrow{font-size:10px!important;letter-spacing:1.3px!important}
+.hero-reference .hero h1{width:100%;max-width:none!important;font-size:clamp(40px,11.5vw,58px)!important;line-height:.96!important;letter-spacing:-2.2px!important;margin:14px 0!important}
+.hero-reference .hero p{max-width:560px;font-size:15px!important;line-height:1.5;margin-bottom:18px!important}
+.hero-reference .hero-contact{margin:16px 0 24px!important;gap:10px!important;flex-wrap:nowrap}
+.hero-reference .hero-call{min-width:0;flex:1 1 auto}
+.hero-reference .hero-call strong{font-size:clamp(20px,6vw,27px)!important;white-space:nowrap}
+.hero-reference .hero-call small{font-size:11px!important}
+.hero-reference .hero-call-icon{width:48px!important;height:48px!important;flex:0 0 48px;font-size:23px!important}
+.hero-reference .hero-whatsapp{width:54px!important;height:54px!important;flex:0 0 54px;border-width:3px;font-size:27px!important}
+.hero-reference .hero-trust{width:100%;max-width:none!important;display:grid!important;grid-template-columns:1fr 1fr;gap:10px 8px!important;margin-top:8px}
+.hero-reference .hero-trust>div{width:100%;max-width:none!important;min-width:0;gap:8px!important}
+.hero-reference .hero-trust>div:last-child{grid-column:1/-1;max-width:260px!important}
+.hero-reference .hero-trust b{width:40px!important;height:40px!important;flex:0 0 40px;font-size:11px!important}
+.hero-reference .hero-trust span{min-width:0;font-size:10px!important;line-height:1.35}
+.hero-reference .hero-trust strong{font-size:11px!important}
+.booking-wrap{width:calc(100% - 20px)!important;margin:18px auto 0!important}
+.booking-layout{width:100%;display:grid!important;grid-template-columns:1fr!important;gap:14px!important}
+.booking-card{width:100%;min-width:0;padding:20px 16px!important;border-radius:18px!important}
+.booking-head{align-items:flex-start}
+.booking-head h3{font-size:24px!important}
+.live-badge{font-size:10px!important;padding:6px 9px!important}
+.booking-tabs{width:100%;overflow-x:auto!important;flex-wrap:nowrap!important;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+.booking-tabs button{flex:0 0 auto!important;min-width:108px!important;padding:12px 13px!important}
+.booking-form{width:100%;grid-template-columns:1fr!important;gap:10px!important}
+.booking-form label:nth-child(1),.booking-form label:nth-child(2){grid-column:auto!important}
+.booking-form label{min-width:0}
+.booking-extras{grid-column:auto!important;display:grid;grid-template-columns:1fr;gap:8px}
+.fare-btn.full{grid-column:auto!important;width:100%}
+.fare-result{grid-template-columns:1fr!important;width:100%;min-width:0}
+.fare-result>div:first-child strong{font-size:28px}
+.fare-summary{display:flex;gap:7px 10px}
+.fare-actions{grid-column:auto!important;display:grid;grid-template-columns:1fr;gap:8px}
+.fare-notice{width:100%}
+.journey-panel{width:100%;min-height:330px!important;border-radius:18px!important}
+.journey-panel-content{min-height:330px!important;padding:24px!important}
+.journey-panel h3{font-size:28px!important}
+.trust-strip{width:calc(100% - 20px);margin:22px auto 0!important;grid-template-columns:1fr 1fr!important;gap:12px!important;padding:14px!important}
+.trust-strip i{display:none!important}
+.trust-strip>div{min-width:0}
+.trust-strip span{min-width:0;font-size:10px}
+.section{width:100%;padding:44px 16px!important}
+.section-head{width:100%}
+.section-head h2{font-size:28px;line-height:1.12}
+.destination-grid{grid-template-columns:1fr 1fr!important;width:100%}
+.destination{min-width:0;height:215px}
+.destination h3{font-size:17px}
+.services{width:100%;padding:44px 16px!important}
+.service-grid{grid-template-columns:1fr 1fr!important;width:100%;gap:9px}
+.service-grid a{min-width:0;min-height:145px;padding:20px 10px}
+.fleet{width:100%;padding-left:16px!important;padding-right:16px!important}
+.fleet-grid{grid-template-columns:1fr 1fr!important;width:100%;gap:9px}
+.fleet-card{min-width:0}
+.fleet-img{height:120px!important}
+.fleet-price b{font-size:17px}
+.routes-card{width:100%;min-width:0;padding:22px!important}
+.routes-card h2{font-size:24px}
+.routes-card p{line-height:1.6}
+.about-grid,.contact-grid{grid-template-columns:1fr!important;width:100%}
+.about h2,.contact h2{font-size:32px!important}
+.about-quote{padding:24px}
+.contact{padding-left:16px!important;padding-right:16px!important}
+.contact-actions{flex-wrap:wrap}
+.contact-actions>*{flex:1 1 140px;text-align:center}
+.review-grid{grid-template-columns:1fr!important}
+.footer-main{grid-template-columns:1fr 1fr!important;width:100%}
+.footer-main>div{min-width:0}
+.footer-main a,.footer-main span{overflow-wrap:anywhere}
+.footer-bottom{width:100%;overflow-wrap:anywhere}
+body{padding-bottom:54px}
+.mobile-bar{height:54px}
+.modal{padding:12px}
+.modal-box{width:100%;max-height:calc(100vh - 24px);overflow:auto;padding:24px 18px}
+}
