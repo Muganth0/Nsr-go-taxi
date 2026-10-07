@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://nsr-go-taxi.vercel.app/</loc>
-  </url>
-  <url>
-    <loc>https://nsr-go-taxi.vercel.app/tour-guide.html</loc>
-  </url>
+  <url><loc>https://nsr-go-taxi.vercel.app/</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/outstation-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/day-booking.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/one-way-outstation-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/round-trip-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-tirupati-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-pondicherry-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-bangalore-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-vellore-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-yelagiri-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-kanchipuram-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-mahabalipuram-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-madurai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/taxi-in-avadi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/taxi-in-ambattur.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/taxi-in-pattabiram.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/taxi-in-poonamallee.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/tour-guide.html</loc></url>
 </urlset>
