@@ -80,6 +80,7 @@ if "returnDate" not in js or "localDuration" not in js:
     errors.append("script.js: round-trip or local-rental fields are not wired")
 
 sitemap_path = ROOT / "sitemap.xml"
+sitemap_urls = set()
 try:
     sitemap = ET.parse(sitemap_path).getroot()
     namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
@@ -88,6 +89,7 @@ try:
         errors.append("sitemap.xml: contains no URLs")
     for entry in urls:
         loc = entry.findtext("sm:loc", default="", namespaces=namespace)
+        sitemap_urls.add(loc)
         if not loc.startswith("https://nsr-go-taxi.vercel.app/"):
             errors.append(f"sitemap.xml: invalid or non-canonical URL {loc}")
         lastmod = entry.findtext("sm:lastmod", default="", namespaces=namespace)
@@ -95,6 +97,22 @@ try:
             errors.append(f"sitemap.xml: invalid lastmod value for {loc}: {lastmod}")
 except ET.ParseError as exc:
     errors.append(f"sitemap.xml: invalid XML ({exc})")
+
+# Route discovery: every route must be reachable from both the homepage and the route hub,
+# and every route landing page must be listed in the XML sitemap.
+home_parser = AuditParser()
+home_parser.feed((ROOT / "index.html").read_text(encoding="utf-8"))
+hub_parser = AuditParser()
+hub_parser.feed((ROOT / "tamil-nadu-taxi-routes.html").read_text(encoding="utf-8"))
+route_pages = sorted(ROOT.glob("*-to-*-taxi.html"))
+for route_page in route_pages:
+    if route_page.name not in home_parser.links:
+        errors.append(f"index.html: route page is not directly linked: {route_page.name}")
+    if route_page.name not in hub_parser.links:
+        errors.append(f"tamil-nadu-taxi-routes.html: route page is missing from directory: {route_page.name}")
+    route_url = f"https://nsr-go-taxi.vercel.app/{route_page.name}"
+    if route_url not in sitemap_urls:
+        errors.append(f"sitemap.xml: route page is missing from sitemap: {route_url}")
 
 if errors:
     raise SystemExit("\n".join(errors))
