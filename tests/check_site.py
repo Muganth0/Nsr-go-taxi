@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = [p for p in ROOT.glob("*.html") if p.name not in {"privacy.html", "terms.html"}]
+PAGES = [p for p in ROOT.glob("*.html") if p.name not in {"privacy.html", "terms.html"} and not p.name.startswith("google")]
 
 class AuditParser(HTMLParser):
     def __init__(self):
