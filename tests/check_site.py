@@ -91,11 +91,11 @@ try:
         if not loc.startswith("https://nsr-go-taxi.vercel.app/"):
             errors.append(f"sitemap.xml: invalid or non-canonical URL {loc}")
         lastmod = entry.findtext("sm:lastmod", default="", namespaces=namespace)
-        if lastmod and not re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", lastmod):
+        if lastmod and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod):
             errors.append(f"sitemap.xml: invalid lastmod value for {loc}: {lastmod}")
 except ET.ParseError as exc:
     errors.append(f"sitemap.xml: invalid XML ({exc})")
 
 if errors:
-    raise SystemExit("\\n".join(errors))
+    raise SystemExit("\n".join(errors))
 print(f"Static site and SEO checks passed for {len(PAGES)} HTML pages.")
