@@ -29,3 +29,15 @@ The Tamil Nadu heritage hero image is sourced from IndiaTripDriver's Tamil Nadu 
 
 
 V6 visual update: the supplied Tamil Nadu heritage taxi artwork is used as the main hero image, with a dark left readability overlay and the fare calculator placed below the hero to avoid overlap.
+
+
+## Quality checks
+- `fare-engine.js` contains the shared, unit-tested fare rules.
+- `node --test tests/fare-engine.test.cjs` tests one-way, round-trip, extras and quote-only services.
+- `python3 tests/check_site.py` checks page metadata and local navigation links.
+- GitHub Actions runs syntax, fare-engine and static-site checks on pushes and pull requests.
+
+## Booking policy
+- Local hourly/day rental and Tempo Traveller are quote-only until approved package rates are configured.
+- Innova and Innova Crysta driver allowance is set to ₹500 to match the fleet display; Sedan and SUV remain ₹400.
+- A WhatsApp enquiry is not a confirmed booking. Final fare and availability must be confirmed by the NSR GO TAXI team.

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- NSR GO TAXI route directory refreshed 2026-11-18 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://nsr-go-taxi.vercel.app/</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/outstation-taxi.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/day-booking.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/one-way-outstation-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-drop-taxi.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/round-trip-taxi.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-tirupati-taxi.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-pondicherry-taxi.html</loc></url>
@@ -18,4 +20,33 @@
   <url><loc>https://nsr-go-taxi.vercel.app/taxi-in-pattabiram.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/taxi-in-poonamallee.html</loc></url>
   <url><loc>https://nsr-go-taxi.vercel.app/tour-guide.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/privacy.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/terms.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-coimbatore-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-trichy-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-tirunelveli-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-tanjore-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-salem-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/chennai-to-nagapattinam-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/tamil-nadu-taxi-routes.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/trichy-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/salem-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/salem-to-coimbatore-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/coimbatore-to-salem-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/madurai-to-trichy-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/trichy-to-madurai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/coimbatore-to-thanjavur-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/thanjavur-to-coimbatore-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/tirupati-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/pondicherry-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/bangalore-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/vellore-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/yelagiri-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/kanchipuram-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/mahabalipuram-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/madurai-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/coimbatore-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/tirunelveli-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/thanjavur-to-chennai-taxi.html</loc></url>
+  <url><loc>https://nsr-go-taxi.vercel.app/nagapattinam-to-chennai-taxi.html</loc></url>
 </urlset>

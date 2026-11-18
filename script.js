@@ -1,10 +1,5 @@
 const PHONE = '917010123465';
-const rates = {
-  sedan:{oneway:15,roundtrip:14,bata:400},
-  suv:{oneway:20,roundtrip:19,bata:400},
-  innova:{oneway:21,roundtrip:20,bata:400},
-  crysta:{oneway:25,roundtrip:24,bata:400}
-};
+const rates = window.NSRFareEngine.rates;
 let tripType = 'oneway';
 let lastRoute = null; // {key, km, minutes, live}
 let lastFare = {distance:0, distanceForFare:0, total:0, mode:'oneway', live:false, minutes:null};
@@ -12,7 +7,7 @@ let lastFare = {distance:0, distanceForFare:0, total:0, mode:'oneway', live:fals
 const $ = id => document.getElementById(id);
 const toast = msg => { const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); };
 function openWhatsApp(text){ window.open('https://wa.me/'+PHONE+'?text='+encodeURIComponent(text),'_blank'); }
-function vehicleName(v){ return v==='crysta' ? 'Innova Crysta' : v.charAt(0).toUpperCase()+v.slice(1); }
+function vehicleName(v){ return v==='crysta' ? 'Innova Crysta' : v==='tempo' ? 'Tempo Traveller' : v.charAt(0).toUpperCase()+v.slice(1); }
 function currentVehicle(){ return $('vehicleSelect').value; }
 
 function setLiveBadge(state){
@@ -97,57 +92,40 @@ async function computeRoute(pickup, destination){
 }
 
 function computeFare(route){
-  const service = tripType;
-  const isRoundTrip = service === 'roundtrip';
-  const v = currentVehicle();
-  const r = rates[v] || rates.sedan;
-
-  // Airport, Local Rental and Outstation currently use the published vehicle
-  // one-way kilometre rate unless Round Trip is selected. No hidden multiplier.
-  const mode = isRoundTrip ? 'roundtrip' : 'oneway';
-  const baseKm = Math.max(1, Number(route.km) || 0);
-  const distanceForFare = isRoundTrip ? baseKm * 2 : baseKm;
-  const rate = Number(r[mode]);
-  const driverBata = 400;
-  const hilly = $('hillySurcharge').checked ? 500 : 0;
-  const luggage = $('luggageSurcharge').checked ? 300 : 0;
-
-  const distanceCharge = Math.round(distanceForFare * rate);
-  const total = distanceCharge + driverBata + hilly + luggage;
-
-  return {
-    distance: baseKm,
-    distanceForFare,
-    total,
-    mode,
-    service,
-    rate,
-    distanceCharge,
-    driverBata,
-    hilly,
-    luggage,
-    live: !!route.live,
-    minutes: route.minutes
-  };
+  return window.NSRFareEngine.calculate({
+    vehicle: currentVehicle(),
+    tripType,
+    distanceKm: route && route.km,
+    live: route && route.live,
+    minutes: route && route.minutes,
+    hilly: $('hillySurcharge').checked,
+    luggage: $('luggageSurcharge').checked,
+    duration: $('localDuration') ? $('localDuration').value : ''
+  });
 }
 
 function renderFareResult(f){
   lastFare = f;
-  $('fareTotal').textContent = '₹'+f.total.toLocaleString('en-IN');
+  $('fareTotal').textContent = f.quoteOnly ? 'Quote on request' : '₹'+f.total.toLocaleString('en-IN');
   const hrs = f.minutes ? (Math.round(((f.mode==='roundtrip'?f.minutes*2:f.minutes)/60)*10)/10) : null;
-  $('fareDistance').textContent = f.distanceForFare+' km'+(hrs ? ' · ~'+hrs+' hr' : '')+(f.live?'':' (approx.)');
+  $('fareDistance').textContent = f.quoteOnly
+    ? (f.service==='local' ? 'Local package: '+(f.duration || 'Duration to confirm') : (f.distanceForFare ? f.distanceForFare+' km' : 'Distance to confirm'))
+    : f.distanceForFare+' km'+(hrs ? ' · ~'+hrs+' hr' : '')+(f.live?'':' (approx.)');
   $('fareVehicle').textContent = vehicleName(currentVehicle());
-  $('fareRate').textContent = '₹'+f.rate+'/km'; $('fareBata').textContent = 'Driver Bata ₹'+f.driverBata.toLocaleString('en-IN');
+  $('fareRate').textContent = f.quoteOnly ? 'Custom pricing' : '₹'+f.rate+'/km';
+  $('fareBata').textContent = f.quoteOnly ? 'To be confirmed' : 'Driver Bata ₹'+f.driverBata.toLocaleString('en-IN');
 
   const resultNote = $('fareResult').querySelector('p');
   if(resultNote){
     resultNote.innerHTML =
-      'Distance ₹'+f.distanceCharge.toLocaleString('en-IN')+
-      ' + Driver Bata ₹'+f.driverBata.toLocaleString('en-IN')+
-      (f.hilly ? ' + Hilly ₹500' : '')+
-      (f.luggage ? ' + Luggage ₹300' : '')+
-      '. '+(f.live ? 'Road distance is live.' : 'Road distance is an approximate fallback.')+
-      ' Final fare is confirmed by NSR GO TAXI.';
+      f.quoteOnly
+        ? 'This service requires a custom quote. NSR GO TAXI will confirm the package, vehicle availability and final fare on WhatsApp.'
+        : 'Distance ₹'+f.distanceCharge.toLocaleString('en-IN')+
+          ' + Driver Bata ₹'+f.driverBata.toLocaleString('en-IN')+
+          (f.hilly ? ' + Hilly ₹500' : '')+
+          (f.luggage ? ' + Luggage ₹300' : '')+
+          '. '+(f.live ? 'Road distance is live.' : 'Road distance is an approximate fallback.')+
+          ' Final fare is confirmed by NSR GO TAXI.';
   }
 
   $('fareResult').classList.remove('hidden');
@@ -171,11 +149,13 @@ function requireTollParkingAcknowledgement(){
 
 function buildMessage(title='Booking Request'){
   const p=$('pickup').value||'Not specified', d=$('destination').value||'Not specified', date=$('date').value||'Not specified', time=$('time').value||'Not specified', pass=$('passengers').value||'Not specified', v=vehicleName(currentVehicle());
+  const returnDate = $('returnDate') && $('returnDate').value ? $('returnDate').value : 'Not specified';
+  const duration = $('localDuration') ? $('localDuration').value : 'Not specified';
   const distanceLine = lastFare.distanceForFare ? lastFare.distanceForFare+' km'+(lastFare.live?' (live)':' (approx.)') : 'To be confirmed';
   const extras=[]; if($('hillySurcharge').checked) extras.push('Hilly area (+₹500)'); if($('luggageSurcharge').checked) extras.push('Extra luggage (+₹300)');
-  return `NSR GO TAXI - ${title}\n\nTrip: ${tripType.toUpperCase()}\nPickup: ${p}\nDestination: ${d}\nDate: ${date}\nTime: ${time}\nPassengers: ${pass}\nVehicle: ${v}\nDistance: ${distanceLine}\nExtras: ${extras.length?extras.join(', '):'None'}\nEstimated Fare: ${lastFare.total?'₹'+lastFare.total.toLocaleString('en-IN'):'To be calculated'}
-Fare Basis: ${lastFare.distanceForFare ? lastFare.distanceForFare+' km × ₹'+lastFare.rate+'/km + Driver Bata ₹'+lastFare.driverBata : 'To be calculated'}
-Extras: ${lastFare.total ? ((lastFare.hilly?'Hilly ₹500; ':'')+(lastFare.luggage?'Luggage ₹300':'')||'None') : 'To be calculated'}
+  return `NSR GO TAXI - ${title}\n\nTrip: ${tripType.toUpperCase()}\nPickup: ${p}\nDestination: ${d}\nDate: ${date}\nReturn Date: ${returnDate}\nTime: ${time}\nPassengers: ${pass}\nVehicle: ${v}\nLocal Package Duration: ${tripType==='local'?duration:'Not applicable'}\nDistance: ${distanceLine}\nExtras: ${extras.length?extras.join(', '):'None'}\nEstimated Fare: ${lastFare.quoteOnly?'Quote on request':lastFare.total?'₹'+lastFare.total.toLocaleString('en-IN'):'To be calculated'}
+Fare Basis: ${lastFare.quoteOnly?'Custom quote to be confirmed':lastFare.distanceForFare ? lastFare.distanceForFare+' km × ₹'+lastFare.rate+'/km + Driver Bata ₹'+lastFare.driverBata : 'To be calculated'}
+Extras: ${lastFare.total ? ((lastFare.hilly?'Hilly ₹500; ':'')+(lastFare.luggage?'Luggage ₹300':'')||'None') : 'To be confirmed'}
 
 Toll & Parking: Excluded from estimated fare; payable separately by customer.
 
@@ -187,10 +167,13 @@ Please confirm availability and final fare.`;
 async function renderFare(){
   const pickup=$('pickup').value.trim(), dest=$('destination').value.trim();
   if(!pickup||!dest){ toast('Enter pickup and destination first.'); return; }
+  if(!$('date').value || !$('time').value){ toast('Select your travel date and pickup time.'); return; }
+  if(tripType==='roundtrip' && $('returnDate') && (!$('returnDate').value || $('returnDate').value < $('date').value)){ toast('Select a return date on or after the pickup date.'); return; }
+  if(tripType==='local' && $('localDuration') && !$('localDuration').value){ toast('Select your local rental duration.'); return; }
   const btn=$('fareSubmitBtn'); const original=btn.innerHTML;
   btn.disabled=true; btn.innerHTML='CHECKING LIVE DISTANCE…';
   try{
-    const route = await computeRoute(pickup,dest);
+    const route = tripType==='local' ? {km:0,minutes:null,live:false} : await computeRoute(pickup,dest);
     renderFareResult(computeFare(route));
   } catch(err){
     $('fareResult').classList.add('hidden');
@@ -206,11 +189,18 @@ function selectVehicle(v){
   if(lastRoute && !$('fareResult').classList.contains('hidden')) renderFareResult(computeFare(lastRoute));
 }
 
+function updateServiceFields(){
+  const returnWrap=$('returnDateWrap'), localWrap=$('localDurationWrap');
+  if(returnWrap) returnWrap.classList.toggle('hidden', tripType!=='roundtrip');
+  if(localWrap) localWrap.classList.toggle('hidden', tripType!=='local');
+}
 document.querySelectorAll('.booking-tabs button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.booking-tabs button').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active'); tripType=b.dataset.trip; toast(b.textContent.trim()+' selected');
+  b.classList.add('active'); tripType=b.dataset.trip; updateServiceFields(); toast(b.textContent.trim()+' selected');
   if(lastRoute && !$('fareResult').classList.contains('hidden')) renderFareResult(computeFare(lastRoute));
+  else if(tripType==='local' && !$('fareResult').classList.contains('hidden')) renderFareResult(computeFare({km:0,live:false}));
 }));
+updateServiceFields();
 
 ['vehicleSelect','hillySurcharge','luggageSurcharge'].forEach(id=>{
   $(id).addEventListener('change',()=>{
@@ -237,13 +227,15 @@ $('locationBtn').addEventListener('click', ()=>{
 
 $('bookRequest').addEventListener('click', ()=>{
   if(!requireTollParkingAcknowledgement()) return;
-  $('bookingSummary').textContent = `${$('pickup').value} → ${$('destination').value} | ${$('date').value} ${$('time').value} | ${$('fareVehicle').textContent} | Estimated ₹${lastFare.total.toLocaleString('en-IN')}`;
+  if(!lastFare || (lastFare.total==null && !lastFare.quoteOnly)){ toast('Calculate the fare or request a quote first.'); return; }
+  $('bookingSummary').textContent = `${$('pickup').value} → ${$('destination').value} | ${$('date').value} ${$('time').value} | ${$('fareVehicle').textContent} | ${lastFare.quoteOnly?'Quote on request':'Estimated ₹'+lastFare.total.toLocaleString('en-IN')}`;
   $('bookingModal').classList.remove('hidden');
 });
 $('closeModal').addEventListener('click', ()=>$('bookingModal').classList.add('hidden'));
 $('sendBooking').addEventListener('click', ()=>{
   const name=$('customerName').value.trim(), mobile=$('customerMobile').value.trim();
-  if(!name||!mobile){ toast('Enter your name and mobile number.'); return; }
+  const digits=mobile.replace(/\\D/g,'');
+  if(!name||!(digits.length===10 || (digits.length===12 && digits.startsWith('91')))){ toast('Enter a valid 10-digit Indian mobile number.'); return; }
   openWhatsApp(buildMessage('BOOKING REQUEST')+`\nCustomer Name: ${name}\nCustomer Mobile: ${mobile}`);
   $('bookingModal').classList.add('hidden'); toast('Opening WhatsApp…');
 });
@@ -255,9 +247,22 @@ $('enquiryForm').addEventListener('submit', e=>{
   toast('Opening WhatsApp…');
 });
 
+function localDateValue(date){
+  const year=date.getFullYear(), month=String(date.getMonth()+1).padStart(2,'0'), day=String(date.getDate()).padStart(2,'0');
+  return year+'-'+month+'-'+day;
+}
 const today = new Date();
-$('date').min = today.toISOString().slice(0,10);
-$('date').value = today.toISOString().slice(0,10);
+$('date').min = localDateValue(today);
+$('date').value = localDateValue(today);
+if($('returnDate')) $('returnDate').min = localDateValue(today);
+if($('pickup')) $('pickup').addEventListener('input', invalidateFare);
+if($('destination')) $('destination').addEventListener('input', invalidateFare);
+function invalidateFare(){
+  lastRoute=null;
+  lastFare={distance:0,distanceForFare:0,total:0,mode:tripType,live:false,minutes:null,quoteOnly:false};
+  if($('fareResult')) $('fareResult').classList.add('hidden');
+}
+if($('returnDate')) $('date').addEventListener('change',()=>{$('returnDate').min=$('date').value; if($('returnDate').value && $('returnDate').value < $('date').value) $('returnDate').value=$('date').value;});
 
 
 /* Mobile navigation */
