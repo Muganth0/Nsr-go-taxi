@@ -20,8 +20,8 @@ class Page(HTMLParser):
 errors=[]
 for path in ROOT.glob("*.html"):
  if path.name.startswith("google"): continue
- html=path.read_text(encoding="utf-8"); p=Page(); p.feed(html)
- title=re.search(r"<title>(.*?)</title>",html,re.I|re.S)
+ page_html=path.read_text(encoding="utf-8"); p=Page(); p.feed(page_html)
+ title=re.search(r"<title>(.*?)</title>",page_html,re.I|re.S)
  if not title: errors.append(f"{path.name}: missing title")
  elif len(html.unescape(re.sub(r"\s+"," ",title.group(1)).strip()))>60: errors.append(f"{path.name}: title exceeds 60 characters")
  desc=p.meta.get("description","")
