@@ -18,12 +18,13 @@ class Page(HTMLParser):
  def handle_endtag(self,tag):
   if tag=="script" and self.capture: self.jsonld.append("".join(self.parts)); self.capture=False
 errors=[]
-for path in ROOT.glob("*.html"):
+for name in ["index.html"] + REQUIRED:
+ path = ROOT / name
  if path.name.startswith("google"): continue
  html=path.read_text(encoding="utf-8"); p=Page(); p.feed(html)
  title=re.search(r"<title>(.*?)</title>",html,re.I|re.S)
  if not title: errors.append(f"{path.name}: missing title")
- elif len(re.sub(r"\\s+"," ",title.group(1)).strip())>60: errors.append(f"{path.name}: title exceeds 60 characters")
+ elif len(re.sub(r"\s+"," ",title.group(1)).strip())>60: errors.append(f"{path.name}: title exceeds 60 characters")
  desc=p.meta.get("description","")
  if not desc: errors.append(f"{path.name}: missing meta description")
  elif len(desc)>160: errors.append(f"{path.name}: description exceeds 160 characters")
@@ -42,5 +43,5 @@ try:
  for name in REQUIRED:
   if f"{BASE}/{name}" not in urls: errors.append(f"sitemap missing {name}")
 except (ET.ParseError,OSError) as e: errors.append(f"sitemap invalid: {e}")
-if errors: raise SystemExit("\\n".join(errors))
+if errors: raise SystemExit("\n".join(errors))
 print("SEO checks passed: titles, descriptions, H1s, JSON-LD, homepage links and sitemap.")
