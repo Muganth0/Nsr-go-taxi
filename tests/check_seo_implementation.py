@@ -18,8 +18,7 @@ class Page(HTMLParser):
  def handle_endtag(self,tag):
   if tag=="script" and self.capture: self.jsonld.append("".join(self.parts)); self.capture=False
 errors=[]
-for name in ["index.html"] + REQUIRED:
- path = ROOT / name
+for path in ROOT.glob("*.html"):
  if path.name.startswith("google"): continue
  html=path.read_text(encoding="utf-8"); p=Page(); p.feed(html)
  title=re.search(r"<title>(.*?)</title>",html,re.I|re.S)
