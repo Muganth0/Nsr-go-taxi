@@ -1,6 +1,6 @@
 from html.parser import HTMLParser
 from pathlib import Path
-import json, re, xml.etree.ElementTree as ET
+import html, json, re, xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 BASE="https://nsr-go-taxi.vercel.app"
 REQUIRED=["taxi-in-avadi.html","taxi-in-ambattur.html","taxi-in-pattabiram.html","taxi-in-poonamallee.html","chennai-airport-taxi.html","tempo-traveller-rental-chennai.html"]
@@ -24,7 +24,7 @@ for name in ["index.html"] + REQUIRED:
  html=path.read_text(encoding="utf-8"); p=Page(); p.feed(html)
  title=re.search(r"<title>(.*?)</title>",html,re.I|re.S)
  if not title: errors.append(f"{path.name}: missing title")
- elif len(re.sub(r"\s+"," ",title.group(1)).strip())>60: errors.append(f"{path.name}: title exceeds 60 characters")
+ elif len(html.unescape(re.sub(r"\s+"," ",title.group(1)).strip()))>60: errors.append(f"{path.name}: title exceeds 60 characters")
  desc=p.meta.get("description","")
  if not desc: errors.append(f"{path.name}: missing meta description")
  elif len(desc)>160: errors.append(f"{path.name}: description exceeds 160 characters")
