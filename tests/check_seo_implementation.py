@@ -3,7 +3,7 @@ from pathlib import Path
 import html, json, re, xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 BASE="https://nsr-go-taxi.vercel.app"
-REQUIRED=["taxi-in-avadi.html","taxi-in-ambattur.html","taxi-in-pattabiram.html","taxi-in-poonamallee.html","chennai-airport-taxi.html","tempo-traveller-rental-chennai.html"]
+REQUIRED=["taxi-in-avadi.html","taxi-in-ambattur.html","taxi-in-pattabiram.html","taxi-in-poonamallee.html","chennai-airport-taxi.html","tempo-traveller-rental-chennai.html","chennai-local-taxi-areas.html","tamil-nadu-city-taxi.html"]
 class Page(HTMLParser):
  def __init__(self):
   super().__init__(); self.h1=0; self.links=[]; self.meta={}; self.jsonld=[]; self.capture=False; self.parts=[]
