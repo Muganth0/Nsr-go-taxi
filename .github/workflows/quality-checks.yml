@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main, "codex/**"]
+    branches: [main, "codex/**", "seo/**"]
   workflow_dispatch:
 
 permissions:
@@ -25,4 +25,4 @@ jobs:
       - name: Run fare-engine tests
         run: node --test tests/fare-engine.test.cjs
       - name: Run static HTML and link checks
-        run: python3 tests/check_site.py
+        run: python3 tests/check_site.py && python3 tests/check_seo_implementation.py
